@@ -24,5 +24,6 @@ Runs the Appium app with given application file
 -h, --help            Help
 
 
-> Run Tests with the application specifying the uploaded <application_name>
+ Run Tests with the application specifying the uploaded <application_name>
+ 
 > ./run_tests.sh --env=remote --platform=android
