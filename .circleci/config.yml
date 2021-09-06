@@ -23,6 +23,29 @@ jobs:
             - ~/.m2
           key: 'v1-dependencies-{{ checksum "pom.xml" }}'
 
+          android_regression_tests:
+            docker: *ref_0
+            working_directory: ~/repo
+            environment: *ref_1
+            steps:
+              - checkout
+              - restore_cache:
+                  keys:
+                    - 'v1-dependencies-{{ checksum "pom.xml" }}'
+                    - v1-dependencies-
+              - run:
+                  name: Android Tests
+                  command: >
+                    ./run_tests.sh --env=local --platform=android
+              - run:
+                  name: Create Cucumber Report
+                  command: java -jar extLib/Cucumber-Report.jar;
+                  when: always
+              - store_test_results:
+                  path: target
+              - store_artifacts:
+                  path: target/
+
           workflows:
             version: 2
             build_test:
@@ -32,3 +55,6 @@ jobs:
                       branches:
                         only:
                           - /feature\/.*/
+                          - android_regression_tests:
+                              requires:
+                                - build
