@@ -82,5 +82,5 @@ if [[ -z ${app_file}  &&  -f "$app_file" ]]; then
 fi
 
 if [ "$env" == "local" ]; then
-    mvn test -q -Dtest.env=${env} -P${platform} -Ddevice.name=${device} -Ddevice.os.version=${device_os_version} -Dapplication.path=${app_file} "-Dcucumber.options=--tags ${run_tag} --tags ~@ignore"
+    mvn test -q -Dtest.env=${env} -P${platform} "-Dcucumber.options=--tags ${run_tag} --tags ~@ignore"
 fi
