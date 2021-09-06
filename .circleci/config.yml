@@ -35,7 +35,7 @@ jobs:
                     - v1-dependencies-
               - run:
                   name: Android Tests
-                  command: >
+                  command:
                     ./run_tests.sh --env=local --platform=android
               - run:
                   name: Create Cucumber Report
