@@ -1,3 +1,4 @@
+#!/bin/bash
 function help_text()
 {
     echo "Runs the test app with given application file"
