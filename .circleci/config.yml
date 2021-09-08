@@ -54,7 +54,7 @@ jobs:
             echo "export DEVICE_OS_VERSION=<< pipeline.parameters.android_develop_os >>" >> $BASH_ENV;
 
             source $BASH_ENV;
-            ./run_tests.sh --env=remote --platform=android --app-name=<< pipeline.parameters.android_stable_custom_id >>
+            -sh ./run_tests.sh --env=remote --platform=android --app-name=<< pipeline.parameters.android_stable_custom_id >>
       - run:
           name: Create Cucumber Report
           command: java -jar extLib/Cucumber-Report.jar;
