@@ -11,7 +11,7 @@ public class DriverService {
     private static AppiumDriver _driver = null;
 
     public static AppiumDriver getDriver() throws Exception {
-        if (null == _driver && !platform.equalsIgnoreCase(EnumConstants.Platform.android.toString())) {
+        if (null == _driver && !platform.equalsIgnoreCase(EnumConstants.Platform.api.toString())) {
             _driver = DriverFactory.getDriver();
         }
         return _driver;

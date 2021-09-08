@@ -82,5 +82,18 @@ if [[ -z ${app_file}  &&  -f "$app_file" ]]; then
 fi
 
 if [ "$env" == "local" ]; then
-    mvn test -q -Dtest.env=${env} -P${platform} -Ddevice.name=${device} -Ddevice.os.version=${device_os_version} -Dapplication.path=${app_file} "-Dcucumber.options=--tags ${run_tag} --tags ~@ignore"
+    mvn test -q -Dtest.env=${env} -P${platform} -Dapplication.path=${app_name} "-Dcucumber.options=--tags ${run_tag} --tags ~@ignore"
+
+elif [ "$env" == "remote" ]; then
+if [ $? -eq 0 ]; then
+        echo "Device Name: ${device}"
+        echo "DEVICE_OS_VERSION ${device_os_version}"
+    mvn test -q -Dtest.env=${env} -P${platform} -Ddevice.name=${device} -Ddevice.os.version=${device_os_version} -Dapplication.path=${app_name} "-Dcucumber.options=--tags ${run_tag} --tags ~@ignore"
+        rerun
+    else
+        exit $?
+    fi
+
 fi
+
+

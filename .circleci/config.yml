@@ -4,13 +4,36 @@ default_node_image:
   working_directory: ~/repo
   environment: &ref_1
     MAVEN_OPTS: '-Xmx3200m'
+    machine:
+      environment:
+        BROWSERSTACK_USERNAME: "pprag_9yLUNK"
+        BROWSERSTACK_ACCESS_KEY: "gSLkqd6z229wfymzFnrC"
+        BROWSERSTACK_LOCAL: false
+        BROWSERSTACK_LOCAL_IDENTIFIER: "identifier"
 version: 2.1
+
+parameters:
+  android_develop_device:
+    default: 'Google_Pixel_3_XL'
+    type: string
+  android_develop_os:
+    default: '9.0'
+    type: string
+  android_stable_custom_id:
+    default: 'TestApp'
+    type: string
 
 jobs:
   build:
     docker: *ref_0
     working_directory: ~/repo
     environment: *ref_1
+      machine:
+        environment:
+          BROWSERSTACK_USERNAME: "pprag_9yLUNK"
+          BROWSERSTACK_ACCESS_KEY: "gSLkqd6z229wfymzFnrC"
+          BROWSERSTACK_LOCAL: false
+          BROWSERSTACK_LOCAL_IDENTIFIER: "identifier"
     steps:
       - checkout
       - restore_cache:
@@ -23,38 +46,51 @@ jobs:
             - ~/.m2
           key: 'v1-dependencies-{{ checksum "pom.xml" }}'
 
-          android_regression_tests:
-            docker: *ref_0
-            working_directory: ~/repo
-            environment: *ref_1
-            steps:
-              - checkout
-              - restore_cache:
-                  keys:
-                    - 'v1-dependencies-{{ checksum "pom.xml" }}'
-                    - v1-dependencies-
-              - run:
-                  name: Android Tests
-                  command: >
-                    ./run_tests.sh --env=local --platform=android
-              - run:
-                  name: Create Cucumber Report
-                  command: java -jar extLib/Cucumber-Report.jar;
-                  when: always
-              - store_test_results:
-                  path: target
-              - store_artifacts:
-                  path: target/
+  tests:
+    docker: *ref_0
+    working_directory: ~/repo
+    environment: *ref_1
+      machine:
+        environment:
+          BROWSERSTACK_USERNAME: "pprag_9yLUNK"
+          BROWSERSTACK_ACCESS_KEY: "gSLkqd6z229wfymzFnrC"
+          BROWSERSTACK_LOCAL: false
+          BROWSERSTACK_LOCAL_IDENTIFIER: "identifier"
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - 'v1-dependencies-{{ checksum "pom.xml" }}'
+            - v1-dependencies-
+      - run:
+          name: Android Tests
+          command: >
+            echo "export DEVICE_NAME=<< pipeline.parameters.android_develop_device >>" >> $BASH_ENV;
 
-          workflows:
-            version: 2
-            build_test:
-              jobs:
-                - build:
-                    filters:
-                      branches:
-                        only:
-                          - /feature\/.*/
-                          - android_regression_tests:
-                              requires:
-                                - build
+            echo "export DEVICE_PLATFORM=android" >> $BASH_ENV;
+
+            echo "export DEVICE_OS_VERSION=<< pipeline.parameters.android_develop_os >>" >> $BASH_ENV;
+
+            source $BASH_ENV;
+            ./run_tests.sh --env=remote --platform=android --app-name=<< pipeline.parameters.android_stable_custom_id >>
+      - run:
+          name: Create Cucumber Report
+          command: java -jar extLib/Cucumber-Report.jar;
+          when: always
+      - store_test_results:
+          path: target
+      - store_artifacts:
+          path: target/
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only:
+                - /feature\/.*/
+      - tests:
+          requires:
+            - build
