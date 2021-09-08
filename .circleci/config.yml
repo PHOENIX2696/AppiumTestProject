@@ -6,6 +6,17 @@ default_node_image:
     MAVEN_OPTS: '-Xmx3200m'
 version: 2.1
 
+parameters:
+  android_develop_device:
+    default: 'Google_Pixel_3_XL'
+    type: string
+  android_develop_os:
+    default: '9.0'
+    type: string
+  android_stable_custom_id:
+    default: 'TestApp'
+    type: string
+
 jobs:
   build:
     docker: *ref_0
@@ -36,8 +47,14 @@ jobs:
       - run:
           name: Android Tests
           command: >
+            echo "export DEVICE_NAME=<< pipeline.parameters.android_develop_device >>" >> $BASH_ENV;
+
+            echo "export DEVICE_PLATFORM=android" >> $BASH_ENV;
+
+            echo "export DEVICE_OS_VERSION=<< pipeline.parameters.android_develop_os >>" >> $BASH_ENV;
+
             source $BASH_ENV;
-            ./run_tests.sh --env=remote --platform=android --app-name=TestApp
+            ./run_tests.sh --env=remote --platform=android --app-name=<< pipeline.parameters.android_stable_custom_id >>
       - run:
           name: Create Cucumber Report
           command: java -jar extLib/Cucumber-Report.jar;
