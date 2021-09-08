@@ -15,7 +15,8 @@ public class HomePage {
 
 
     @Then("^Youtube home page displayed$")
-    public void youtubeHomePageDisplayed() {
+    public void youtubeHomePageDisplayed() throws InterruptedException {
         System.out.println("Home Page Displayed");
+        Thread.sleep(5000);
     }
 }

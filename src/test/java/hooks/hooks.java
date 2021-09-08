@@ -8,6 +8,7 @@ import net.sourceforge.htmlunit.corejs.javascript.tools.shell.Global;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Value;
 import utils.CommonUtils;
+import utils.Constants;
 import utils.DriverFactory;
 import utils.DriverService;
 
@@ -34,11 +35,10 @@ public class hooks {
             Runtime.getRuntime()
                     .addShutdownHook(
                             new Thread() {
-
                                 public void run() {
                                     if (sessionOpen) {
                                         System.out.println("Closing the session...");
-                                        driver.quit();
+                                        driver.terminateApp(Constants.APP_PACKAGE_NAME);
                                         sessionOpen = false;
                                     }
                                 }
