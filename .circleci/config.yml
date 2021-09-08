@@ -4,14 +4,13 @@ default_node_image:
   working_directory: ~/repo
   environment: &ref_1
     MAVEN_OPTS: '-Xmx3200m'
+    machine:
+      environment:
+        BROWSERSTACK_USERNAME: "pprag_9yLUNK"
+        BROWSERSTACK_ACCESS_KEY: "gSLkqd6z229wfymzFnrC"
+        BROWSERSTACK_LOCAL: false
+        BROWSERSTACK_LOCAL_IDENTIFIER: "identifier"
 version: 2.1
-
-machine:
-  environment:
-    BROWSERSTACK_USERNAME: "pprag_9yLUNK"
-    BROWSERSTACK_ACCESS_KEY: "gSLkqd6z229wfymzFnrC"
-    BROWSERSTACK_LOCAL: false
-    BROWSERSTACK_LOCAL_IDENTIFIER: "identifier"
 
 parameters:
   android_develop_device:
@@ -29,6 +28,12 @@ jobs:
     docker: *ref_0
     working_directory: ~/repo
     environment: *ref_1
+      machine:
+        environment:
+          BROWSERSTACK_USERNAME: "pprag_9yLUNK"
+          BROWSERSTACK_ACCESS_KEY: "gSLkqd6z229wfymzFnrC"
+          BROWSERSTACK_LOCAL: false
+          BROWSERSTACK_LOCAL_IDENTIFIER: "identifier"
     steps:
       - checkout
       - restore_cache:
@@ -45,6 +50,12 @@ jobs:
     docker: *ref_0
     working_directory: ~/repo
     environment: *ref_1
+      machine:
+        environment:
+          BROWSERSTACK_USERNAME: "pprag_9yLUNK"
+          BROWSERSTACK_ACCESS_KEY: "gSLkqd6z229wfymzFnrC"
+          BROWSERSTACK_LOCAL: false
+          BROWSERSTACK_LOCAL_IDENTIFIER: "identifier"
     steps:
       - checkout
       - restore_cache:
