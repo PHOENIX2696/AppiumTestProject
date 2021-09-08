@@ -37,7 +37,7 @@ jobs:
           name: Android Tests
           command: >
             source $BASH_ENV;
-            ./run_tests.sh --env=remote --platform=android --device=Google_Pixel_3 --app-name=TestApp
+            ./run_tests.sh --env=remote --platform=android --app-name=TestApp
       - run:
           name: Create Cucumber Report
           command: java -jar extLib/Cucumber-Report.jar;
